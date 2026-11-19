@@ -1,8 +1,13 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.3.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.3.1**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.3.1
+
+- Every screen now calculates even when a saved rifle has no muzzle velocity or BC, using a typical factory load for its caliber and grain (clearly labeled).
+- In Action restyled: header bar with menu, wind button and clock box, white ring with draggable wind marker, swipeable wheel pages (range / wind / angle, then temperature / altitude / humidity), and swipeable result pages (clicks, MOA/MIL values, flight details). Phone tab bar replaced by the ☰ menu on this screen.
 
 ## What's new in 1.3.0
 
