@@ -1,8 +1,17 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.3.1**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.4.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.4.0
+
+- In Action uses the Echo colors (dark panels, orange accents).
+- Wind fills itself in: set which way you're facing (pick N–NW or use the phone compass) and Echo turns the local weather wind into speed and a clock direction. You can still drag the ring or spin the wheel; a hand-set wind isn't overwritten for 45 minutes. The orange button refills from weather any time.
+- Hands-free spotter keeps listening the whole time: say "hit", "two low one left", "miss", or any note ("flinched on that one") and Echo logs each shot and its notes without a tap.
+- Fewer false shots: the gunshot detector needs a near-instant, very loud onset and no speech around it, so talking no longer counts as a shot. The mic and recognizer pause while Echo speaks, which stops it hearing itself and looping.
+- Manual mode: skip the voice entirely, tap where the shot landed (or Hit / Miss), submit it, and get a recommended correction to apply or skip.
+- All adjustments are spoken and shown in clicks ("come up 4 clicks and left 2 clicks").
 
 ## What's new in 1.3.1
 

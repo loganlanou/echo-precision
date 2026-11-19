@@ -282,6 +282,8 @@
   function normalizeCall(text) {
     let s = " " + String(text || "").toLowerCase().replace(/[,;!?]/g, " ").replace(/-/g, " ") + " ";
     s = s.replace(/\b(\w+) and a half\b/g, (m, w) => (w in NUMWORDS ? NUMWORDS[w] + 0.5 : m));
+    const after = "(?=\\s+(?:inch|inches|mils?|moa|minutes?|left|right|high|low|up|down|short|over|under)\\b)";
+    s = s.replace(new RegExp("\\b(?:to|too)\\b" + after, "g"), "2").replace(new RegExp("\\bfor\\b" + after, "g"), "4").replace(new RegExp("\\bwon\\b" + after, "g"), "1").replace(new RegExp("\\btree\\b" + after, "g"), "3");
     s = s.replace(/\ba couple( of)?\b/g, "2").replace(/\ba (quarter|half)\b/g, "$1");
     s = s.replace(/\b(zero|an?|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty)\b/g, w => String(NUMWORDS[w]));
     s = s.replace(/\bpoint (\d)/g, ".$1").replace(/(\d)\s*(?:and\s+)?(?:1\s+)?half\b/g, (m, d) => String(Number(d) + 0.5));

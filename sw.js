@@ -1,6 +1,6 @@
 // Echo Precision offline support: network-first so deployments are never stale,
 // falling back to the last cached copy when the range has no signal.
-const CACHE = "echo-precision-v1.3.1";
+const CACHE = "echo-precision-v1.4.0";
 const SHELL = ["/", "/index.html", "/ballistics.js", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", event => {
