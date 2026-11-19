@@ -71,7 +71,9 @@ module.exports = async function handler(req, res) {
       windDirection: c.wind_direction_10m ?? null,
       humidity: c.relative_humidity_2m ?? null,
       pressure: c.surface_pressure ?? null,
-      altitudeMeters: Number.isFinite(data.elevation) ? data.elevation : null
+      altitudeMeters: Number.isFinite(data.elevation) ? data.elevation : null,
+      latitude: Math.round(lat * 100) / 100,
+      longitude: Math.round(lon * 100) / 100
     }));
   } catch (error) {
     res.statusCode = 502;
