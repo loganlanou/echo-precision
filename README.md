@@ -1,6 +1,6 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.4.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.4.1**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
 
