@@ -1,8 +1,16 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.2.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.2.1**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.2.1
+
+- MIL output now uses 0.1 MIL clicks when the scope is set up in MOA (previously reused the ¼-MOA click value).
+- Spotter corrections now show your **new total dial** after each called shot, and "Use computed solution" fills in that corrected dial.
+- Visiting Quick Acquire no longer switches the Ballistics and In Action screens to the quick load.
+- "Edit rifle data" on the Ballistics screen opens the rifle editor; assistant understands "how stable is my bullet?"; sub-click corrections read "hold"; clearer dial sign labels and chart zero label.
+- Verified against py-ballisticcalc: within 0.014 MOA from 100–1,000 yd (.308 150 gr, G1).
 
 ## What's new in 1.2.0
 
