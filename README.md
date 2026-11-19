@@ -33,3 +33,7 @@ Vercel serves the static `index.html` and the serverless `api/weather.js` endpoi
 ## Privacy
 
 Avoid committing account credentials, API keys, browser session data, or any personal session exports to this repository.
+
+## Deployment smoke test
+
+This repository's `main` branch is the source for the existing `echo-precision-test` Vercel project. Changes to this branch should trigger automatic production deployments. The browser application and its API are versioned together; verify both endpoints after a release.
