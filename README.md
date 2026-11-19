@@ -1,8 +1,15 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.2.1**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.3.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.3.0
+
+- **One-screen In Action:** rifle/cartridge header, a wind-direction ring (drag to where the wind comes from, read as a clock), range / wind speed / angle wheels, and big click readouts (e.g. "31 clicks UP · 26 clicks LEFT").
+- **Minimal input:** pick caliber and bullet weight; Echo uses your matching saved rifle or a built-in table of typical factory loads (15 calibers), adjusted for barrel length. Local weather is used when available.
+- **Hands-free spotter:** listens for the shot, asks "Call it", understands calls like "two low one right", "low 2 left 1", "hit", "miss", asks follow-ups ("How many inches low?"), and speaks the click correction plus your new dial. Voice commands: undo, distance 500, wind 10 from 3 o'clock, what's my dial, range clear.
+- Simplified navigation: In Action, History, Rifles, More (detailed tools moved under More).
 
 ## What's new in 1.2.1
 

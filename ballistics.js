@@ -273,27 +273,100 @@
    * Parse a spotter call like "two inches low and one right", "hit 0.3 mil high 0.2 left",
    * "impact 4 inch left 2 high". Returns { x, y, unit } with unit "in" | "MOA" | "MIL", or null.
    */
-  function parseSpotterCall(text) {
+  /**
+   * Spotter-call parser. Understands number-first ("two low, one right") and
+   * direction-first ("low 2, right 1") calls, inches / MOA / MIL, hits and misses.
+   * Returns {x, y, unit, missing:[dirs without an amount], center, miss} or null.
+   */
+  const NUMWORDS = { zero: 0, a: 1, an: 1, half: 0.5, quarter: 0.25, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20, couple: 2 };
+  function normalizeCall(text) {
+    let s = " " + String(text || "").toLowerCase().replace(/[,;!?]/g, " ").replace(/-/g, " ") + " ";
+    s = s.replace(/\b(\w+) and a half\b/g, (m, w) => (w in NUMWORDS ? NUMWORDS[w] + 0.5 : m));
+    s = s.replace(/\ba couple( of)?\b/g, "2").replace(/\ba (quarter|half)\b/g, "$1");
+    s = s.replace(/\b(zero|an?|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty)\b/g, w => String(NUMWORDS[w]));
+    s = s.replace(/\bpoint (\d)/g, ".$1").replace(/(\d)\s*(?:and\s+)?(?:1\s+)?half\b/g, (m, d) => String(Number(d) + 0.5));
+    return s;
+  }
+  const DIRS = { left: "left", right: "right", high: "high", up: "high", over: "high", above: "high", low: "low", down: "low", under: "low", short: "low", below: "low" };
+  const UNITWORD = /^(inches|inch|in|"|mils?|mrad|milliradians?|moa|minutes?|of|an|a)$/;
+  function parseCall(text) {
     if (!text) return null;
-    const words = { zero: 0, a: 1, an: 1, half: 0.5, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20 };
-    let s = " " + String(text).toLowerCase().replace(/[,;]/g, " ") + " ";
-    s = s.replace(/\b(\w+) and a half\b/g, (m, w) => (w in words ? words[w] + 0.5 : m));
-    s = s.replace(/\b(zero|an?|half|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty)\b/g, w => String(words[w]));
-    s = s.replace(/\bpoint (\d)/g, ".$1");
+    const s = normalizeCall(text);
     let unit = "in";
     if (/\b(mils?|mrad|milliradians?)\b/.test(s)) unit = "MIL";
     else if (/\b(moa|minutes?)\b/.test(s)) unit = "MOA";
-    let x = null, y = null;
-    const re = /(\d*\.?\d+)\s*(?:inches|inch|in|"|mils?|mrad|moa|minutes?)?\s*(left|right|high|low|up|down)\b/g;
-    let m;
-    while ((m = re.exec(s))) {
-      const v = Number(m[1]), d = m[2];
-      if (d === "left") x = -v; else if (d === "right") x = v;
-      else if (d === "high" || d === "up") y = v; else y = -v;
-    }
-    if (/\b(center|centre|bullseye|bull's eye|x ring|dead on|on target)\b/.test(s) && x == null && y == null) { x = 0; y = 0; }
-    if (x == null && y == null) return null;
-    return { x: x || 0, y: y || 0, unit };
+    const tok = s.match(/\d*\.?\d+|[a-z']+|"/g) || [];
+    const isNum = t => /^\d*\.?\d+$/.test(t);
+    const firstSig = tok.find(t => isNum(t) || DIRS[t]);
+    const dirFirst = !!(firstSig && DIRS[firstSig]);
+    const used = new Set(), found = {}, missing = [];
+    const take = (from, step) => {
+      for (let k = from, hops = 0; k >= 0 && k < tok.length && hops < 3; k += step, hops++) {
+        const t = tok[k];
+        if (isNum(t)) return used.has(k) ? null : k;
+        if (DIRS[t] || !UNITWORD.test(t)) return null;
+      }
+      return null;
+    };
+    tok.forEach((t, i) => {
+      const d = DIRS[t];
+      if (!d) return;
+      const axis = d === "left" || d === "right" ? "x" : "y";
+      if (found[axis] != null) return;
+      let k = dirFirst ? take(i + 1, 1) : take(i - 1, -1);
+      if (k == null) k = dirFirst ? take(i - 1, -1) : take(i + 1, 1);
+      if (k == null) { missing.push(d); found[axis] = 0; return; }
+      used.add(k);
+      const v = Number(tok[k]);
+      found[axis] = d === "left" || d === "low" ? -v : v;
+    });
+    const anyDir = found.x != null || found.y != null;
+    const center = !anyDir && /\b(center|centre|bullseye|bull's eye|x ring|dead on|on target|good hit|hit|impact|ding|steel|perfect|nailed it|smack)\b/.test(s);
+    const miss = /\b(miss|missed|no hit|didn't see|did not see|no impact)\b/.test(s) && !anyDir;
+    if (!anyDir && !center && !miss) return null;
+    return { x: found.x || 0, y: found.y || 0, unit, missing, center, miss };
+  }
+  function parseSpotterCall(text) {
+    const c = parseCall(text);
+    if (!c || c.miss || c.missing.length) return null;
+    return { x: c.x, y: c.y, unit: c.unit };
+  }
+
+  /**
+   * Typical factory loads (velocity from the maker's test barrel, published G1 BC).
+   * Used when the shooter only gives caliber + grain weight.
+   */
+  const LOADS = [
+    { key: "223", label: ".223 Rem / 5.56", match: /(^|\D)(223|5\.?56)(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.224, loads: [[55, 3240, 0.255], [62, 3020, 0.304], [69, 2950, 0.301], [77, 2720, 0.372]] },
+    { key: "308", label: ".308 Win / 7.62x51", match: /(^|\D)(308|7\.?62\s*x?\s*51|7\.62 nato)(\D|$)/, testBarrel: 24, fpsPerIn: 28, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2820, 0.408], [165, 2700, 0.435], [168, 2650, 0.462], [175, 2600, 0.505], [178, 2600, 0.547], [180, 2620, 0.383]] },
+    { key: "65cm", label: "6.5 Creedmoor", match: /6\.?5\s*(cm|creed)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[130, 2800, 0.510], [140, 2710, 0.646], [143, 2700, 0.625], [147, 2695, 0.697]] },
+    { key: "3006", label: ".30-06 Springfield", match: /30\s*[-.]?\s*0?6|3006/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2910, 0.409], [165, 2800, 0.447], [168, 2700, 0.462], [180, 2700, 0.452]] },
+    { key: "300wm", label: ".300 Win Mag", match: /300\s*(win|wm|w\.?m|mag)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[180, 2960, 0.507], [190, 2900, 0.533], [200, 2850, 0.597], [212, 2860, 0.673]] },
+    { key: "300blk", label: ".300 Blackout", match: /300\s*(blk|black|aac)/, testBarrel: 16, fpsPerIn: 15, sight: 2.6, twist: "1:8", diameter: 0.308, loads: [[110, 2350, 0.289], [125, 2185, 0.334], [220, 1000, 0.600]] },
+    { key: "6cm", label: "6mm Creedmoor", match: /6\s*mm\s*(cm|creed)|6\s*creed|6cm/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:7.5", diameter: 0.243, loads: [[103, 3050, 0.512], [108, 2960, 0.536]] },
+    { key: "243", label: ".243 Win", match: /(^|\D)243(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.243, loads: [[95, 3100, 0.379], [100, 2960, 0.381]] },
+    { key: "270", label: ".270 Win", match: /(^|\D)270(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.277, loads: [[130, 3060, 0.409], [140, 2950, 0.460], [150, 2850, 0.480]] },
+    { key: "7rm", label: "7mm Rem Mag", match: /7\s*mm\s*(rem|mag)|7\s*rm/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[150, 3110, 0.456], [162, 2940, 0.631], [175, 2860, 0.462]] },
+    { key: "65prc", label: "6.5 PRC", match: /6\.?5\s*prc/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[143, 2960, 0.625], [147, 2910, 0.697]] },
+    { key: "338lm", label: ".338 Lapua Mag", match: /338\s*(lap|lm)/, testBarrel: 27, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.338, loads: [[250, 2950, 0.648], [285, 2745, 0.789], [300, 2660, 0.768]] },
+    { key: "65g", label: "6.5 Grendel", match: /6\.?5\s*gren/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.264, loads: [[123, 2580, 0.510]] },
+    { key: "224v", label: ".224 Valkyrie", match: /224\s*val/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:7", diameter: 0.224, loads: [[75, 3000, 0.435], [90, 2700, 0.563]] },
+    { key: "22lr", label: ".22 LR", match: /22\s*(lr|long)/, testBarrel: 24, fpsPerIn: 0, sight: 1.5, twist: "1:16", diameter: 0.223, loads: [[36, 1280, 0.125], [40, 1070, 0.138]] }
+  ];
+  function caliberFor(text) {
+    const t = String(text || "").toLowerCase();
+    return LOADS.find(c => c.key === t) || LOADS.find(c => c.match.test(t)) || null;
+  }
+  /** Look up a typical load. Returns {caliber, grains, mv, bc, drag, nearest, testBarrel, barrelIn} or null. */
+  function lookupLoad(caliber, grains, barrelIn) {
+    const c = typeof caliber === "object" && caliber ? caliber : caliberFor(caliber);
+    if (!c) return null;
+    const g = Number(grains);
+    let best = c.loads[0];
+    if (g > 0) best = c.loads.reduce((a, l) => (Math.abs(l[0] - g) < Math.abs(a[0] - g) ? l : a), best);
+    const barrel = Number(barrelIn) > 0 ? Math.min(34, Math.max(6, Number(barrelIn))) : c.testBarrel;
+    const mv = Math.round(best[1] - c.fpsPerIn * (c.testBarrel - barrel));
+    return { caliber: c, grains: best[0], requestedGrains: g || best[0], exact: !(g > 0) || best[0] === g, mv, factoryMv: best[1], bc: best[2], drag: "G1", testBarrel: c.testBarrel, barrelIn: barrel, sightHeightIn: c.sight, twist: c.twist, diameterIn: c.diameter };
   }
 
   /** Group statistics for impacts [{x,y}] in inches. */
@@ -309,5 +382,5 @@
     return { count: pts.length, meanX: mx, meanY: my, extremeSpread: es, meanRadius, radialSD: sd };
   }
 
-  return { solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, groupStats, toMOA, toMIL, TABLES, CONST: C };
+  return { solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, parseCall, LOADS, caliberFor, lookupLoad, groupStats, toMOA, toMIL, TABLES, CONST: C };
 });
