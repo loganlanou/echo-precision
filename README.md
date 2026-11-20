@@ -1,8 +1,18 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.6.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.7.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.7.0
+
+- New **Compass** button next to Shooting on the wind card. It opens a live compass: point the top of your phone at the target, watch the needle and degrees (for example W 268°) update, then tap **Lock direction**. Echo sets your shooting direction to the exact degree and fills the wind clock from local weather.
+- It tells you to hold steady, tilt the phone flatter, or recalibrate (figure-8, away from the rifle and vehicle) when the reading isn't reliable. On iPhone, Safari asks for motion access the first time; without a compass it offers the N–NW buttons instead.
+
+## What's new in 1.6.1
+
+- Temperature (and humidity) now fill in from local weather. Before, the Temp wheel locked itself at the 59°F default the first time the screen drew, so weather never replaced it.
+- A temperature you set by hand is kept for 3 hours, then local weather takes over again. The orange weather button refreshes temperature and humidity straight away.
 
 ## What's new in 1.6.0
 
