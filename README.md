@@ -1,8 +1,14 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.4.2**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.5.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.5.0
+
+- The wind card's direction button is now **Shooting**, with a small arrow pointing the way you picked.
+- If no shooting direction is saved, In Action asks "Which way are you shooting?" once, with N–NW buttons and the phone compass. Tap **Later** to hide it.
+- Say "shooting west" (or "facing northeast", "shooting toward the south") to the voice spotter: Echo sets the direction, refills the wind from local weather and reads back the new clicks.
 
 ## What's new in 1.4.0
 
