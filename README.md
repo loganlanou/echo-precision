@@ -1,8 +1,15 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.5.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.6.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.6.0
+
+- Echo keeps track of your turret during a spotter session. A starting note records the first dial from zero, and every click change (after a called shot, a range or wind change, or a new shooting direction) is logged as a note on that shot: what you clicked and where you are now from zero.
+- Undo takes back a shot's click change too.
+- Range clear shows a **Return to zero** card with the clicks to come back (for example 27 clicks DOWN, 24 clicks RIGHT) until you tap "I'm back on zero". Echo also says it out loud.
+- Say "back to zero" during a session to hear the clicks to return.
 
 ## What's new in 1.5.0
 
