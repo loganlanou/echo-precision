@@ -1,8 +1,16 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.11.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.12.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.12.0
+
+- **Install Echo on your phone.** More → "Echo on your phone" shows how: on iPhone, Safari → Share → Add to Home Screen; on Android, the Install button (or Chrome ⋮ → Install app).
+- **Works with no signal.** The whole app is saved on the phone when it is first opened. With signal, the newest version still loads; with weak or no signal it opens from the phone after at most 3 seconds.
+- New home-screen icons for iPhone and Android, and the app opens full screen without browser bars.
+- When there's no signal, Echo says so and skips the weather lookup. If spoken calls need signal on your phone, it switches to tap entry and typed calls.
+- Fixed: the range, wind, angle or temperature wheels could jump to their lowest value if the screen redrew mid-scroll.
 
 ## What's new in 1.11.0
 
