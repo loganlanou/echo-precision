@@ -96,3 +96,24 @@ test("group stats", () => {
 test("rejects bad input", () => {
   assert.equal(B.solve({ ballisticCoefficient: 0.5 }).ok, false);
 });
+
+test("spotter calls in plain words", () => {
+  assert.deepEqual(B.parseSpotterCall("two inches to the left"), { x: -2, y: 0, unit: "in" });
+  assert.deepEqual(B.parseSpotterCall("high by 3"), { x: 0, y: 3, unit: "in" });
+  assert.deepEqual(B.parseCall("a little right").vague, ["right"]);
+  assert.equal(B.parseCall("right on").center, true);
+});
+
+test("gunshot check rejects claps and thuds", () => {
+  const sr = 48000, pre = 960, len = pre + 9600;
+  let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 * 2 - 1; };
+  const noise = Array.from({ length: len }, rnd);
+  let y = 0; const a = Math.exp(-2 * Math.PI * 300 / sr), low = noise.map(v => (y = (1 - a) * v + a * y));
+  const mk = fn => { const w = new Float32Array(len); for (let i = 0; i < len; i++) { const t = (i - pre) / sr; w[i] = Math.max(-1, Math.min(1, 0.003 * rnd() + (t >= 0 ? fn(t, i) : 0))); } return w; };
+  const shot = mk((t, i) => (t < 0.0018 ? 1.6 * (1 - 2 * t / 0.0018) : 0) + 0.5 * Math.exp(-t / 0.03) * (noise[i] * 0.5 + low[i] * 6));
+  const clap = mk((t, i) => 0.9 * (noise[i] - low[i] * 1.2) * Math.exp(-t / 0.004) * Math.min(1, t / 0.0003));
+  const thud = mk(t => 0.9 * Math.sin(2 * Math.PI * 110 * t) * Math.exp(-t / 0.03) * Math.min(1, t / 0.002));
+  assert.equal(B.gunCheck(shot, sr, pre).ok, true);
+  assert.equal(B.gunCheck(clap, sr, pre).ok, false);
+  assert.equal(B.gunCheck(thud, sr, pre).ok, false);
+});

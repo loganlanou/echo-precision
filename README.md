@@ -1,8 +1,19 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.9.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.10.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.10.0
+
+- New **Compete** tab:
+  - Set the number of targets, the first and last plate size (in even steps, usually 2" smaller each), points per hit (1 each, smaller worth more, or custom), and your round count or no limit.
+  - **Shot timer.** Echo says "Shooter ready", then beeps at a random moment within 5 seconds. With gunshot listening on, it records split times, and the clock stops on your last round.
+  - **Target calls.** "Hit target one", "missed a little left on four", "two low on T3", or just "hit" for the target you're on. Echo uses each plate's size: a near miss is placed just past the edge, and an impact call with no hit or miss is scored against the plate. It gives the clicks for your next shot.
+  - **Score by hand** with ✓ and ✕ on each target, or let the voice calls score it.
+  - The stage ends after your last round, or when you say "range clear", "targets clear", "shooting complete" or "stage complete". Echo then reads your time, score and return to zero.
+- Return to zero counts every click moved during the session: the first dial, each follow-up correction, and clicks you report ("up two clicks").
+- The gunshot detector now checks each loud sound for a sharp start, a low boom, a high crack and enough ring. Claps (no boom), dropped objects (no crack) and voices (slow start) are ignored. Use "Test the shot detector" on the Compete tab to see why each sound counted or not.
 
 ## What's new in 1.9.0
 

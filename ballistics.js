@@ -342,6 +342,49 @@
     if (!anyDir && !center && !miss) return null;
     return { x: found.x || 0, y: found.y || 0, unit, missing, vague, center, miss };
   }
+  /**
+   * Gunshot check for one loud sound. w holds raw mic samples with the loud onset at index off
+   * (about 20 ms of lead-in, 200 ms after). A rifle shot at the shooter is:
+   *  - instant: nothing loud in the 2-15 ms before the peak (voice, wind and thuds build up),
+   *  - broadband: a low boom under 400 Hz AND a crack above 3 kHz (a clap has no boom, a dropped object has no crack),
+   *  - long enough: it takes more than ~10 ms to fall 20 dB (a clap or tap dies away faster).
+   * Returns { ok, why, low, high, ringMs, peak }.
+   */
+  function gunCheck(w, sr, off) {
+    const ms = x => Math.round(sr * x / 1000);
+    let p = off, pk = 0;
+    for (let k = Math.max(0, off - ms(1)); k <= Math.min(w.length - 1, off + ms(10)); k++) { const a = Math.abs(w[k]); if (a > pk) { pk = a; p = k; } }
+    const out = { ok: false, why: "", low: 0, high: 0, ringMs: 0, peak: Math.round(pk * 100) / 100 };
+    if (!(pk > 0)) { out.why = "silent"; return out; }
+    // Rise is measured from the first sample that reaches half the peak, so a tail louder than the first crack still counts as instant.
+    let q = p;
+    for (let k = Math.max(0, off - ms(1)); k <= p; k++) if (Math.abs(w[k]) >= pk * 0.5) { q = k; break; }
+    let pre = 0;
+    for (let k = Math.max(0, q - ms(15)); k <= q - ms(2); k++) pre = Math.max(pre, Math.abs(w[k]));
+    const biq = (f, hp) => { const w0 = 2 * Math.PI * f / sr, c = Math.cos(w0), al = Math.sin(w0) / (2 * Math.SQRT1_2), a0 = 1 + al;
+      return hp ? [(1 + c) / 2 / a0, -(1 + c) / a0, (1 + c) / 2 / a0, -2 * c / a0, (1 - al) / a0] : [(1 - c) / 2 / a0, (1 - c) / a0, (1 - c) / 2 / a0, -2 * c / a0, (1 - al) / a0]; };
+    const run = (co, from, to, cb) => { let x1 = 0, x2 = 0, y1 = 0, y2 = 0; for (let k = from; k < to; k++) { const x = w[k], y = co[0] * x + co[1] * x1 + co[2] * x2 - co[3] * y1 - co[4] * y2; x2 = x1; x1 = x; y2 = y1; y1 = y; cb(k, y); } };
+    const a = Math.max(0, p - ms(15)), s0 = Math.max(0, p - ms(1)), s1 = Math.min(w.length, p + ms(40));
+    let E = 0, El = 0, Eh = 0;
+    for (let k = s0; k < s1; k++) E += w[k] * w[k];
+    run(biq(400, false), a, s1, (k, y) => { if (k >= s0) El += y * y; });
+    run(biq(3000, true), a, s1, (k, y) => { if (k >= s0) Eh += y * y; });
+    out.low = E ? El / E : 0; out.high = E ? Eh / E : 0;
+    const fr = ms(2), rms = j => { let t = 0; const b = s0 + j * fr; for (let k = b; k < Math.min(w.length, b + fr); k++) t += w[k] * w[k]; return Math.sqrt(t / fr); };
+    const nf = Math.floor((w.length - s0) / fr);
+    let pf = 0, pj = 0;
+    for (let j = 0; j < Math.min(5, nf); j++) { const r = rms(j); if (r > pf) { pf = r; pj = j; } }
+    let ring = nf * 2;
+    for (let j = pj + 1; j < nf - 1; j++) if (rms(j) < pf * 0.1 && rms(j + 1) < pf * 0.1) { ring = (j - pj) * 2; break; }
+    out.ringMs = ring;
+    out.low = Math.round(out.low * 1000) / 1000; out.high = Math.round(out.high * 1000) / 1000;
+    if (pre > pk * 0.3) out.why = "builds up too slowly (voice, wind or a thud)";
+    else if (out.low < 0.06) out.why = "no low boom (clap, snap or click)";
+    else if (out.high < 0.03) out.why = "no sharp crack (dropped object or thump)";
+    else if (ring < 10) out.why = "dies away too fast (clap or tap)";
+    else out.ok = true;
+    return out;
+  }
   function parseSpotterCall(text) {
     const c = parseCall(text);
     if (!c || c.miss || c.missing.length) return null;
@@ -398,5 +441,5 @@
     return { count: pts.length, meanX: mx, meanY: my, extremeSpread: es, meanRadius, radialSD: sd };
   }
 
-  return { solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, parseCall, LOADS, caliberFor, lookupLoad, groupStats, toMOA, toMIL, TABLES, CONST: C };
+  return { gunCheck, solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, parseCall, LOADS, caliberFor, lookupLoad, groupStats, toMOA, toMIL, TABLES, CONST: C };
 });
