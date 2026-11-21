@@ -1,8 +1,12 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.7.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.8.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.8.0
+
+- New **reticle hold** page in the clicks card (swipe once from the clicks). It draws a scope picture with an orange dot showing where to put the target if you leave your turrets on zero, for example "Hold 6.75 MOA high · 5.75 MOA left", plus the same correction as clicks. Marks are every 1 MOA (numbered every 5); MIL scopes use 0.5 or 1 mil marks. The view zooms out for bigger holds.
 
 ## What's new in 1.7.0
 
