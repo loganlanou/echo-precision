@@ -278,32 +278,45 @@
    * direction-first ("low 2, right 1") calls, inches / MOA / MIL, hits and misses.
    * Returns {x, y, unit, missing:[dirs without an amount], center, miss} or null.
    */
-  const NUMWORDS = { zero: 0, a: 1, an: 1, half: 0.5, quarter: 0.25, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20, couple: 2 };
+  const NUMWORDS = { zero: 0, a: 1, an: 1, half: 0.5, quarter: 0.25, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, eighteen: 18, twenty: 20, thirty: 30, couple: 2 };
+  // "a little right", "slightly low": a small miss the shooter did not measure. The app turns it into about half a MOA.
+  const VAGUE = "(?:just\\s+)?(?:a\\s+(?:little|little\\s+bit|bit|tad|touch|hair|smidge)|little|slightly|barely|a\\s+skosh)";
   function normalizeCall(text) {
-    let s = " " + String(text || "").toLowerCase().replace(/[,;!?]/g, " ").replace(/-/g, " ") + " ";
+    let s = " " + String(text || "").toLowerCase().replace(/[,;!?]/g, " ").replace(/-/g, " ").replace(/\bm\.?\s?o\.?\s?a\b\.?/g, "moa").replace(/\bmills?\b/g, "mil").replace(/\b(\d+)\s*(?:in\.|")/g, "$1 inches ") + " ";
+    // Things a recognizer hears in place of a direction, and "right on" meaning a hit.
+    s = s.replace(/\bright\s+(?:on|there|in the middle|at center|center|dead center)\b/g, " center ").replace(/\b(?:write|rite|wright)\b/g, "right").replace(/\bhi\b/g, "high").replace(/\blo\b/g, "low");
+    s = s.replace(new RegExp("\\b" + VAGUE + "\\s+(?:to\\s+the\\s+|too\\s+)?(?=(?:left|right|high|low|up|down|short|over|under)\\b)", "g"), " vague ");
     s = s.replace(/\b(\w+) and a half\b/g, (m, w) => (w in NUMWORDS ? NUMWORDS[w] + 0.5 : m));
     const after = "(?=\\s+(?:inch|inches|mils?|moa|minutes?|left|right|high|low|up|down|short|over|under)\\b)";
     s = s.replace(new RegExp("\\b(?:to|too)\\b" + after, "g"), "2").replace(new RegExp("\\bfor\\b" + after, "g"), "4").replace(new RegExp("\\bwon\\b" + after, "g"), "1").replace(new RegExp("\\btree\\b" + after, "g"), "3");
-    s = s.replace(/\ba couple( of)?\b/g, "2").replace(/\ba (quarter|half)\b/g, "$1");
+    s = s.replace(/\ba couple( of)?\b/g, "2").replace(/\ba (quarter|half)\b/g, "$1").replace(/\b(half|quarter)\s+(?:of\s+)?an?\b/g, "$1");
     s = s.replace(/\b(zero|an?|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty)\b/g, w => String(NUMWORDS[w]));
     s = s.replace(/\bpoint (\d)/g, ".$1").replace(/(\d)\s*(?:and\s+)?(?:1\s+)?half\b/g, (m, d) => String(Number(d) + 0.5));
     return s;
   }
   const DIRS = { left: "left", right: "right", high: "high", up: "high", over: "high", above: "high", low: "low", down: "low", under: "low", short: "low", below: "low" };
-  const UNITWORD = /^(inches|inch|in|"|mils?|mrad|milliradians?|moa|minutes?|of|an|a)$/;
+  // Words that can sit between an amount and its direction: "2 inches to the left", "high by 3".
+  const UNITWORD = /^(inches|inch|in|"|mils?|mrad|milliradians?|moa|minutes?|of|an|a|to|the|by|about|around|roughly|maybe|like|just|and|was|it|is|or|so|it's|its)$/;
   function parseCall(text) {
     if (!text) return null;
     const s = normalizeCall(text);
     let unit = "in";
     if (/\b(mils?|mrad|milliradians?)\b/.test(s)) unit = "MIL";
     else if (/\b(moa|minutes?)\b/.test(s)) unit = "MOA";
+    // "3 inches at 4 o'clock": a distance and a clock direction.
+    const ck = s.match(/(\d*\.?\d+)\s*(?:inches|inch|moa|minutes?|mils?)?\s*(?:at|toward|towards)?\s*(\d{1,2})\s*o'?\s*clock/);
+    if (ck && !/\b(left|right|high|low|up|down|wind)\b/.test(s) && Number(ck[2]) >= 1 && Number(ck[2]) <= 12) {
+      const r = Number(ck[1]), a = (Number(ck[2]) % 12) * Math.PI / 6, rd = v => Math.round(v * 100) / 100;
+      return { x: rd(r * Math.sin(a)), y: rd(r * Math.cos(a)), unit, missing: [], vague: [], center: false, miss: false };
+    }
     const tok = s.match(/\d*\.?\d+|[a-z']+|"/g) || [];
-    const isNum = t => /^\d*\.?\d+$/.test(t);
+    const vague = [];
+    const isNum = t => /^\d*\.?\d+$/.test(t) || t === "vague";
     const firstSig = tok.find(t => isNum(t) || DIRS[t]);
     const dirFirst = !!(firstSig && DIRS[firstSig]);
     const used = new Set(), found = {}, missing = [];
     const take = (from, step) => {
-      for (let k = from, hops = 0; k >= 0 && k < tok.length && hops < 3; k += step, hops++) {
+      for (let k = from, hops = 0; k >= 0 && k < tok.length && hops < 4; k += step, hops++) {
         const t = tok[k];
         if (isNum(t)) return used.has(k) ? null : k;
         if (DIRS[t] || !UNITWORD.test(t)) return null;
@@ -319,14 +332,15 @@
       if (k == null) k = dirFirst ? take(i - 1, -1) : take(i + 1, 1);
       if (k == null) { missing.push(d); found[axis] = 0; return; }
       used.add(k);
-      const v = Number(tok[k]);
+      if (tok[k] === "vague") vague.push(d);
+      const v = tok[k] === "vague" ? 1 : Number(tok[k]);
       found[axis] = d === "left" || d === "low" ? -v : v;
     });
     const anyDir = found.x != null || found.y != null;
-    const center = !anyDir && /\b(center|centre|bullseye|bull's eye|x ring|dead on|on target|good hit|hit|impact|ding|steel|perfect|nailed it|smack)\b/.test(s);
-    const miss = /\b(miss|missed|no hit|didn't see|did not see|no impact)\b/.test(s) && !anyDir;
+    const miss = /\b(miss|missed|no hit|didn't see|did not see|no impact|didn't hit|did not hit|nothing|no splash)\b/.test(s) && !anyDir;
+    const center = !anyDir && !miss && /\b(center|centre|bullseye|bull's eye|x ring|dead on|on target|good hit|good shot|nice shot|hit|hits|hit it|impact|ding|dinged|ring|rang|clang|steel|perfect|nailed it|smack|smacked|smoked it|got it|on it|center mass)\b/.test(s);
     if (!anyDir && !center && !miss) return null;
-    return { x: found.x || 0, y: found.y || 0, unit, missing, center, miss };
+    return { x: found.x || 0, y: found.y || 0, unit, missing, vague, center, miss };
   }
   function parseSpotterCall(text) {
     const c = parseCall(text);

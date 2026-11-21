@@ -1,8 +1,15 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.8.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.9.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.9.0
+
+- The voice spotter talks less: it says the yardage and the clicks, then "Send it when ready."
+- It understands more ways of calling a shot: "a little right", "slightly low", "two inches to the left", "high by three", "three inches at four o'clock", "right on", "rang it".
+- "Up two clicks" or "I came left one click" logs a turret move you made yourself.
+- Listening is steadier on phones. A pause now ends your call even when the phone never sends a final result. Repeated results are dropped. Gunshot listening starts off on phones, because it competes with speech recognition for the microphone.
 
 ## What's new in 1.8.0
 
