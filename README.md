@@ -1,8 +1,15 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.10.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.11.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.11.0
+
+- The rifle name at the top of In Action is now a dropdown of your saved rifles. Pick one and Echo uses its velocity, BC, zero and scope.
+- New **⚡ Quick caliber** button next to it: 62 common hunting, magnum, competition, AR, lever, rimfire and military cartridges with typical factory loads and a search box (7mm-08, 7mm PRC, 7mm WSM, .300 WSM, .300 PRC, 6.8 Western, 6 Dasher, 6mm GT, .22 Creedmoor, .30-30, .45-70 and more).
+- Saved rifles in a cartridge Echo doesn't list still work in In Action as long as they have a velocity and BC.
+- The bottom navigation bar now stays visible on every screen on phones, including In Action.
 
 ## What's new in 1.10.0
 

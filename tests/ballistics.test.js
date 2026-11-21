@@ -117,3 +117,13 @@ test("gunshot check rejects claps and thuds", () => {
   assert.equal(B.gunCheck(clap, sr, pre).ok, false);
   assert.equal(B.gunCheck(thud, sr, pre).ok, false);
 });
+
+test("caliber library matches common names", () => {
+  const want = { "7mm-08 Remington": "7mm08", "7mm PRC": "7prc", "7 mag": "7rm", ".300 WSM": "300wsm", ".300 Win Mag": "300wm", ".270 WSM": "270wsm", ".270 Win": "270", ".280 AI": "280ai", "30-30": "3030", ".30-06": "3006", "6 Dasher": "6dasher", ".22-250": "2250", "5.56": "223", ".338 Win Mag": "338wm", ".338 Lapua": "338lm" };
+  for (const [name, key] of Object.entries(want)) assert.equal(B.caliberFor(name)?.key, key, name);
+  for (const c of B.LOADS) {
+    assert.ok(B.LOAD_GROUPS.some(g => g[0] === c.group), c.key + " has a group");
+    const l = B.lookupLoad(c.key);
+    assert.ok(l.mv > 900 && l.bc > 0.05, c.key + " has a load");
+  }
+});

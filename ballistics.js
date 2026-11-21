@@ -396,25 +396,76 @@
    * Used when the shooter only gives caliber + grain weight.
    */
   const LOADS = [
-    { key: "223", label: ".223 Rem / 5.56", match: /(^|\D)(223|5\.?56)(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.224, loads: [[55, 3240, 0.255], [62, 3020, 0.304], [69, 2950, 0.301], [77, 2720, 0.372]] },
-    { key: "308", label: ".308 Win / 7.62x51", match: /(^|\D)(308|7\.?62\s*x?\s*51|7\.62 nato)(\D|$)/, testBarrel: 24, fpsPerIn: 28, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2820, 0.408], [165, 2700, 0.435], [168, 2650, 0.462], [175, 2600, 0.505], [178, 2600, 0.547], [180, 2620, 0.383]] },
-    { key: "65cm", label: "6.5 Creedmoor", match: /6\.?5\s*(cm|creed)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[130, 2800, 0.510], [140, 2710, 0.646], [143, 2700, 0.625], [147, 2695, 0.697]] },
-    { key: "3006", label: ".30-06 Springfield", match: /30\s*[-.]?\s*0?6|3006/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2910, 0.409], [165, 2800, 0.447], [168, 2700, 0.462], [180, 2700, 0.452]] },
-    { key: "300wm", label: ".300 Win Mag", match: /300\s*(win|wm|w\.?m|mag)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[180, 2960, 0.507], [190, 2900, 0.533], [200, 2850, 0.597], [212, 2860, 0.673]] },
-    { key: "300blk", label: ".300 Blackout", match: /300\s*(blk|black|aac)/, testBarrel: 16, fpsPerIn: 15, sight: 2.6, twist: "1:8", diameter: 0.308, loads: [[110, 2350, 0.289], [125, 2185, 0.334], [220, 1000, 0.600]] },
-    { key: "6cm", label: "6mm Creedmoor", match: /6\s*mm\s*(cm|creed)|6\s*creed|6cm/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:7.5", diameter: 0.243, loads: [[103, 3050, 0.512], [108, 2960, 0.536]] },
-    { key: "243", label: ".243 Win", match: /(^|\D)243(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.243, loads: [[95, 3100, 0.379], [100, 2960, 0.381]] },
-    { key: "270", label: ".270 Win", match: /(^|\D)270(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.277, loads: [[130, 3060, 0.409], [140, 2950, 0.460], [150, 2850, 0.480]] },
-    { key: "7rm", label: "7mm Rem Mag", match: /7\s*mm\s*(rem|mag)|7\s*rm/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[150, 3110, 0.456], [162, 2940, 0.631], [175, 2860, 0.462]] },
-    { key: "65prc", label: "6.5 PRC", match: /6\.?5\s*prc/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[143, 2960, 0.625], [147, 2910, 0.697]] },
-    { key: "338lm", label: ".338 Lapua Mag", match: /338\s*(lap|lm)/, testBarrel: 27, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.338, loads: [[250, 2950, 0.648], [285, 2745, 0.789], [300, 2660, 0.768]] },
-    { key: "65g", label: "6.5 Grendel", match: /6\.?5\s*gren/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.264, loads: [[123, 2580, 0.510]] },
-    { key: "224v", label: ".224 Valkyrie", match: /224\s*val/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:7", diameter: 0.224, loads: [[75, 3000, 0.435], [90, 2700, 0.563]] },
-    { key: "22lr", label: ".22 LR", match: /22\s*(lr|long)/, testBarrel: 24, fpsPerIn: 0, sight: 1.5, twist: "1:16", diameter: 0.223, loads: [[36, 1280, 0.125], [40, 1070, 0.138]] }
+    { key: "223", group: "ar", label: ".223 Rem / 5.56", match: /(^|\D)(223|5\.?56)(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.224, loads: [[55, 3240, 0.255], [62, 3020, 0.304], [69, 2950, 0.301], [77, 2720, 0.372]] },
+    { key: "308", group: "hunt", label: ".308 Win / 7.62x51", match: /(^|\D)(308|7\.?62\s*x?\s*51|7\.62 nato)(\D|$)/, testBarrel: 24, fpsPerIn: 28, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2820, 0.408], [165, 2700, 0.435], [168, 2650, 0.462], [175, 2600, 0.505], [178, 2600, 0.547], [180, 2620, 0.383]] },
+    { key: "65cm", group: "comp", label: "6.5 Creedmoor", match: /6\.?5\s*(cm|creed)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[130, 2800, 0.510], [140, 2710, 0.646], [143, 2700, 0.625], [147, 2695, 0.697]] },
+    { key: "3006", group: "hunt", label: ".30-06 Springfield", match: /30\s*[-.]?\s*0?6|3006/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 2910, 0.409], [165, 2800, 0.447], [168, 2700, 0.462], [180, 2700, 0.452]] },
+    { key: "300wm", group: "mag", label: ".300 Win Mag", match: /300\s*(win|wm|w\.?m|mag)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[180, 2960, 0.507], [190, 2900, 0.533], [200, 2850, 0.597], [212, 2860, 0.673]] },
+    { key: "300blk", group: "ar", label: ".300 Blackout", match: /300\s*(blk|black|aac)/, testBarrel: 16, fpsPerIn: 15, sight: 2.6, twist: "1:8", diameter: 0.308, loads: [[110, 2350, 0.289], [125, 2185, 0.334], [220, 1000, 0.600]] },
+    { key: "6cm", group: "comp", label: "6mm Creedmoor", match: /6\s*mm\s*(cm|creed)|6\s*creed|6cm/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:7.5", diameter: 0.243, loads: [[103, 3050, 0.512], [108, 2960, 0.536]] },
+    { key: "243", group: "hunt", label: ".243 Win", match: /(^|\D)243(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.243, loads: [[95, 3100, 0.379], [100, 2960, 0.381]] },
+    { key: "270", group: "hunt", label: ".270 Win", match: /(^|\D)270(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.277, loads: [[130, 3060, 0.409], [140, 2950, 0.460], [150, 2850, 0.480]] },
+    { key: "7rm", group: "mag", label: "7mm Rem Mag", match: /7\s*mm\s*(rem|mag)|7\s*rm|(^|\D)7\s*mag/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[150, 3110, 0.456], [162, 2940, 0.631], [175, 2860, 0.462]] },
+    { key: "65prc", group: "mag", label: "6.5 PRC", match: /6\.?5\s*prc/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[143, 2960, 0.625], [147, 2910, 0.697]] },
+    { key: "338lm", group: "mag", label: ".338 Lapua Mag", match: /338\s*(lap|lm)/, testBarrel: 27, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.338, loads: [[250, 2950, 0.648], [285, 2745, 0.789], [300, 2660, 0.768]] },
+    { key: "65g", group: "ar", label: "6.5 Grendel", match: /6\.?5\s*gren/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:8", diameter: 0.264, loads: [[123, 2580, 0.510]] },
+    { key: "224v", group: "ar", label: ".224 Valkyrie", match: /224\s*val/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:7", diameter: 0.224, loads: [[75, 3000, 0.435], [90, 2700, 0.563]] },
+    { key: "22lr", group: "rim", label: ".22 LR", match: /22\s*(lr|long)/, testBarrel: 24, fpsPerIn: 0, sight: 1.5, twist: "1:16", diameter: 0.223, loads: [[36, 1280, 0.125], [40, 1070, 0.138]] },
+    { key: "300wsm", group: "mag", label: ".300 WSM", match: /300\s*(wsm|win\s*short|w\.?s\.?m)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[150, 3300, 0.415], [165, 3130, 0.447], [180, 2970, 0.507]] },
+    { key: "270wsm", group: "mag", label: ".270 WSM", match: /270\s*(wsm|win\s*short|w\.?s\.?m)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.277, loads: [[130, 3275, 0.435], [150, 3120, 0.496]] },
+    { key: "7wsm", group: "mag", label: "7mm WSM", match: /7\s*mm\s*(wsm|win\s*short)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:9.5", diameter: 0.284, loads: [[140, 3225, 0.455], [160, 2990, 0.475]] },
+    { key: "280ai", group: "hunt", label: ".280 Ackley Improved", match: /280\s*(ai|ack)/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[140, 3150, 0.485], [160, 2950, 0.531]] },
+    { key: "300wby", group: "mag", label: ".300 Weatherby Mag", match: /300\s*(wby|weath)/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[180, 3240, 0.507], [200, 3060, 0.588]] },
+    { key: "300rum", group: "mag", label: ".300 Rem Ultra Mag", match: /300\s*(rum|r\.?u\.?m|ultra|rem\s*ultra)/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.308, loads: [[180, 3250, 0.507], [200, 3030, 0.588]] },
+    { key: "300nm", group: "mag", label: ".300 Norma Mag", match: /300\s*norma/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.308, loads: [[215, 3000, 0.691], [230, 2900, 0.743]] },
+    { key: "300prc", group: "mag", label: ".300 PRC", match: /300\s*prc/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:8.5", diameter: 0.308, loads: [[212, 2860, 0.663], [225, 2810, 0.777]] },
+    { key: "338wm", group: "mag", label: ".338 Win Mag", match: /338\s*(win|wm|w\.?m|mag)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.338, loads: [[225, 2800, 0.456], [250, 2650, 0.484]] },
+    { key: "2250", group: "rim", label: ".22-250 Rem", match: /22\s*[-.]?\s*250/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:14", diameter: 0.224, loads: [[50, 3800, 0.242], [55, 3680, 0.255]] },
+    { key: "22cm", group: "comp", label: ".22 Creedmoor", match: /22\s*(cm|creed)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:7", diameter: 0.224, loads: [[80, 3110, 0.485], [88, 3030, 0.545]] },
+    { key: "22arc", group: "ar", label: ".22 ARC", match: /22\s*arc/, testBarrel: 18, fpsPerIn: 25, sight: 2.6, twist: "1:7", diameter: 0.224, loads: [[62, 3000, 0.295], [88, 2750, 0.545]] },
+    { key: "2506", group: "hunt", label: ".25-06 Rem", match: /25\s*[-.]?\s*0?6/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.257, loads: [[100, 3230, 0.357], [117, 3110, 0.39]] },
+    { key: "3030", group: "lever", label: ".30-30 Win", match: /30\s*[-/]\s*30|30\s*wcf/, testBarrel: 24, fpsPerIn: 20, sight: 1.5, twist: "1:12", diameter: 0.308, loads: [[150, 2390, 0.193], [160, 2400, 0.33], [170, 2200, 0.254]] },
+    { key: "762x39", group: "mil", label: "7.62x39", match: /7\.?62\s*x\s*39/, testBarrel: 20, fpsPerIn: 20, sight: 2.6, twist: "1:9.5", diameter: 0.311, loads: [[123, 2350, 0.295], [154, 2100, 0.35]] },
+    { key: "762x54", group: "mil", label: "7.62x54R", match: /7\.?62\s*x\s*54/, testBarrel: 28, fpsPerIn: 25, sight: 1.75, twist: "1:9.5", diameter: 0.311, loads: [[150, 2800, 0.36], [174, 2600, 0.471]] },
+    { key: "7mm08", group: "hunt", label: "7mm-08 Rem", match: /7\s*mm\s*-?\s*08|(^|\D)7\s*-\s*08/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:9.5", diameter: 0.284, loads: [[120, 3000, 0.305], [139, 2840, 0.486], [150, 2650, 0.415]] },
+    { key: "7prc", group: "mag", label: "7mm PRC", match: /7\s*(mm)?\s*prc/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:8", diameter: 0.284, loads: [[175, 3000, 0.689], [180, 2975, 0.796]] },
+    { key: "7bc", group: "hunt", label: "7mm Backcountry", match: /7\s*mm\s*back|7\s*bc/, testBarrel: 22, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.284, loads: [[155, 3000, 0.586], [170, 2910, 0.652]] },
+    { key: "28nos", group: "mag", label: ".28 Nosler", match: /28\s*nos/, testBarrel: 26, fpsPerIn: 30, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[160, 3300, 0.531], [175, 3125, 0.648]] },
+    { key: "68w", group: "mag", label: "6.8 Western", match: /6\.?8\s*west/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:7.5", diameter: 0.277, loads: [[165, 2970, 0.62], [175, 2840, 0.656]] },
+    { key: "277f", group: "hunt", label: ".277 Fury (6.8x51)", match: /277\s*fury|6\.?8\s*x\s*51/, testBarrel: 16, fpsPerIn: 25, sight: 2.6, twist: "1:7", diameter: 0.277, loads: [[135, 3000, 0.415], [140, 2830, 0.555]] },
+    { key: "68spc", group: "ar", label: "6.8 SPC", match: /6\.?8\s*spc/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:11", diameter: 0.277, loads: [[110, 2550, 0.37]] },
+    { key: "6arc", group: "ar", label: "6mm ARC", match: /6\s*mm\s*arc|(^|\D)6\s*arc/, testBarrel: 24, fpsPerIn: 25, sight: 2.6, twist: "1:7.5", diameter: 0.243, loads: [[103, 2800, 0.512], [108, 2750, 0.536]] },
+    { key: "6dasher", group: "comp", label: "6mm Dasher", match: /dasher/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.243, loads: [[105, 2950, 0.53], [108, 2900, 0.536]] },
+    { key: "6gt", group: "comp", label: "6mm GT", match: /6\s*(mm)?\s*gt(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:7.5", diameter: 0.243, loads: [[108, 2950, 0.536], [109, 2925, 0.576]] },
+    { key: "6br", group: "comp", label: "6mm BR Norma", match: /6\s*(mm)?\s*br(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.243, loads: [[105, 2850, 0.53], [107, 2820, 0.547]] },
+    { key: "65x47", group: "comp", label: "6.5x47 Lapua", match: /6\.?5\s*x\s*47/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[123, 2900, 0.547], [139, 2720, 0.611]] },
+    { key: "65284", group: "comp", label: "6.5-284 Norma", match: /6\.?5\s*[-x]\s*284/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:8.5", diameter: 0.264, loads: [[140, 2950, 0.585]] },
+    { key: "65x55", group: "mil", label: "6.5x55 Swede", match: /6\.?5\s*x\s*55|swed/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[129, 2770, 0.485], [140, 2650, 0.495]] },
+    { key: "7x57", group: "mil", label: "7x57 Mauser", match: /7\s*x\s*57|7\s*mm\s*mauser/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:9", diameter: 0.284, loads: [[140, 2660, 0.39], [175, 2390, 0.3]] },
+    { key: "8mm", group: "mil", label: "8mm Mauser", match: /8\s*mm\s*mau|8\s*x\s*57|7\.?92\s*x/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:9.5", diameter: 0.323, loads: [[170, 2360, 0.261], [195, 2475, 0.427]] },
+    { key: "204", group: "rim", label: ".204 Ruger", match: /(^|\D)204(\D|$)/, testBarrel: 24, fpsPerIn: 30, sight: 1.75, twist: "1:12", diameter: 0.204, loads: [[32, 4225, 0.21], [40, 3900, 0.275]] },
+    { key: "22nos", group: "rim", label: ".22 Nosler", match: /22\s*nos/, testBarrel: 24, fpsPerIn: 30, sight: 2.6, twist: "1:8", diameter: 0.224, loads: [[55, 3350, 0.25], [77, 3000, 0.34]] },
+    { key: "260", group: "comp", label: ".260 Rem", match: /(^|\D)260(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:8", diameter: 0.264, loads: [[129, 2850, 0.485], [140, 2750, 0.52]] },
+    { key: "257wby", group: "mag", label: ".257 Weatherby Mag", match: /257\s*(wby|weath)/, testBarrel: 26, fpsPerIn: 35, sight: 1.75, twist: "1:10", diameter: 0.257, loads: [[100, 3570, 0.357], [110, 3460, 0.418]] },
+    { key: "280", group: "hunt", label: ".280 Rem", match: /(^|\D)280(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:9.5", diameter: 0.284, loads: [[140, 3000, 0.391], [160, 2800, 0.475]] },
+    { key: "35wh", group: "hunt", label: ".35 Whelen", match: /35\s*whel/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:16", diameter: 0.358, loads: [[200, 2675, 0.303], [250, 2400, 0.33]] },
+    { key: "375hh", group: "mag", label: ".375 H&H Mag", match: /375\s*(h|holl)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:12", diameter: 0.375, loads: [[270, 2690, 0.38], [300, 2530, 0.398]] },
+    { key: "350l", group: "lever", label: ".350 Legend", match: /350\s*leg/, testBarrel: 20, fpsPerIn: 20, sight: 2.6, twist: "1:16", diameter: 0.355, loads: [[145, 2350, 0.223], [180, 2100, 0.272]] },
+    { key: "450bm", group: "lever", label: ".450 Bushmaster", match: /450\s*bush/, testBarrel: 20, fpsPerIn: 20, sight: 2.6, twist: "1:24", diameter: 0.452, loads: [[250, 2200, 0.21]] },
+    { key: "4570", group: "lever", label: ".45-70 Govt", match: /45\s*[-/]?\s*70/, testBarrel: 24, fpsPerIn: 15, sight: 1.5, twist: "1:20", diameter: 0.458, loads: [[325, 2050, 0.23], [405, 1330, 0.281]] },
+    { key: "303", group: "mil", label: ".303 British", match: /(^|\D)303(\D|$)/, testBarrel: 24, fpsPerIn: 25, sight: 1.75, twist: "1:10", diameter: 0.312, loads: [[150, 2685, 0.361], [174, 2475, 0.471]] },
+    { key: "17hmr", group: "rim", label: ".17 HMR", match: /17\s*(hmr|hornady\s*mag)/, testBarrel: 24, fpsPerIn: 5, sight: 1.5, twist: "1:9", diameter: 0.172, loads: [[17, 2550, 0.125], [20, 2375, 0.14]] },
+    { key: "22wmr", group: "rim", label: ".22 WMR", match: /22\s*(wmr|win\s*mag|mag)/, testBarrel: 24, fpsPerIn: 5, sight: 1.5, twist: "1:16", diameter: 0.224, loads: [[30, 2200, 0.081], [40, 1910, 0.109]] },
+    { key: "375ct", group: "comp", label: ".375 CheyTac", match: /375\s*chey/, testBarrel: 29, fpsPerIn: 30, sight: 1.75, twist: "1:10", diameter: 0.375, loads: [[350, 2970, 0.945]] },
+    { key: "50bmg", group: "mil", label: ".50 BMG", match: /50\s*(bmg|cal)/, testBarrel: 29, fpsPerIn: 30, sight: 2, twist: "1:15", diameter: 0.51, loads: [[660, 2910, 0.67], [750, 2820, 1.05]] }
   ];
+  /** Groups for pickers, in display order. */
+  const LOAD_GROUPS = [["hunt", "Hunting"], ["mag", "Magnums"], ["comp", "Competition & long range"], ["ar", "AR & short barrel"], ["lever", "Lever & big bore"], ["rim", "Varmint & rimfire"], ["mil", "Military & classic"]];
+  // Patterns that overlap a broader one (".300 WSM" vs ".300 Win Mag") are checked first.
+  const FIRST = LOADS.filter(c => ["300wsm", "270wsm", "7wsm", "280ai", "300wby", "300rum", "300nm", "300prc", "338wm", "2250", "22cm", "22arc", "2506", "3030", "762x39", "762x54", "7mm08", "7prc", "7bc", "28nos", "68w", "277f", "68spc", "6arc", "6dasher", "6gt", "6br", "65x47", "65284", "65x55", "7x57", "8mm"].includes(c.key));
   function caliberFor(text) {
     const t = String(text || "").toLowerCase();
-    return LOADS.find(c => c.key === t) || LOADS.find(c => c.match.test(t)) || null;
+    return LOADS.find(c => c.key === t) || FIRST.find(c => c.match.test(t)) || LOADS.find(c => c.match.test(t)) || null;
   }
   /** Look up a typical load. Returns {caliber, grains, mv, bc, drag, nearest, testBarrel, barrelIn} or null. */
   function lookupLoad(caliber, grains, barrelIn) {
@@ -441,5 +492,5 @@
     return { count: pts.length, meanX: mx, meanY: my, extremeSpread: es, meanRadius, radialSD: sd };
   }
 
-  return { gunCheck, solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, parseCall, LOADS, caliberFor, lookupLoad, groupStats, toMOA, toMIL, TABLES, CONST: C };
+  return { gunCheck, solve, atmosphere, cd, windComponents, millerStability, parseTwist, impactCorrection, trueVelocity, parseSpotterCall, parseCall, LOADS, LOAD_GROUPS, caliberFor, lookupLoad, groupStats, toMOA, toMIL, TABLES, CONST: C };
 });
