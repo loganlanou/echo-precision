@@ -1,8 +1,14 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.2**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.3**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.16.3
+
+- **Magnification slider rebuilt for touch.** It now runs the full width of the card with a large thumb, and dragging it no longer swipes the results card, so it reaches the lowest and highest power. There are also − 1x / + 1x buttons and a Fit to hold button, and arrow keys work on desktop.
+- **What you'd see at that power.** Under the slider: the field of view at that power (e.g. "View 3.7 ft wide at 100 yd (42 MOA)" at 30x on the Tenmile). That's why the outer reticle is cut off at high power, just like through the glass.
+- **Objective lens size.** Scopes now have an objective size (read from names like "4.5-30x56", or entered in Rifles → Scopes). The objective doesn't change how big the picture or reticle looks; it sets the exit pupil (objective ÷ power). Echo shows it ("exit pupil 1.9 mm (56 mm ÷ 30x)") and dims and darkens the edges of the preview when it gets small, the way a smaller scope does at high power.
 
 ## What's new in 1.16.2
 
