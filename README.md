@@ -1,8 +1,13 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.1**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.16.1
+
+- **Compass fix.** On Android the live compass could read 180° off (north showed as south) when the phone was held up near vertical. The heading now comes from the phone's full orientation. Held flat, it uses the direction the top of the phone points; held up, it uses the direction the back camera faces. The reading stays right at any tilt.
+- **Flip 180° backup.** If a phone still reads backwards, "Reads backwards? Flip 180°" in the compass panel fixes it. The setting is saved on that phone.
 
 ## What's new in 1.16.0
 
