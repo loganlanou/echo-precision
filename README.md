@@ -1,8 +1,18 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.12.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.13.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.13.0
+
+- New **Sight In** tab (also in More, the In Action menu, and an "⊕ Sight in" button on every rifle under Rifles):
+  1. Pick a saved rifle or create a new one (name, caliber, scope).
+  2. Tell Echo what one turret click moves: 1/8, 1/4, 1/2 or 1 MOA, 0.05, 0.1 or 0.2 MIL, or any other value.
+  3. Set the zero distance (25, 50, 100, 200 yd or any yards/meters) and 1–5 shots per group.
+  4. Fire the group, then tap where each shot hit on the target or type it ("2 high 1 left", "center").
+  5. Echo finds the group center and says exactly how many clicks to dial up/down and left/right. Repeat until the group is within 0.3 MOA (0.1 MIL) of the bull.
+  6. Save the zero: the rifle's zero distance and the scope's click value are stored (with a log of every group), the rifle becomes the selected rifle, and In Action, Competition and the ballistic calculator use it from then on.
 
 ## What's new in 1.12.0
 
