@@ -1,8 +1,14 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.13.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.14.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.14.0
+
+- **Real reticle on the hold page.** If your scope uses the Vortex EBR-2C (MRAD) reticle, the In Action hold page draws that reticle, built from Vortex's own measurements. You see the 0.5-mil marks, the fine 0.1 marks from 5 to 7, the numbered holdover tree with wind dots every 0.2 mil (big dot every mil), and the heavy outer bars and post. The orange ring shows where to put the target, and Echo says it in words, e.g. "3.9 down (0.1 above line 4) · 1.3 right (1 big dot + 1½ dots)". Holds past the end of the reticle tell you to dial instead.
+- **Known scope fill-in.** Under Armory → Scopes, "Known scope" fills in the Vortex Viper PST Gen II 5-25x50 FFP with the EBR-2C MRAD reticle: first focal plane, MRAD turrets, 0.1 MRAD per click, plus travel and parallax notes.
+- **Unit mismatch check.** A scope saved with MOA turrets but an MRAD reticle (or the other way round) gets a warning on its scope and rifle cards, with a one-tap fix. The fix keeps the old settings as a revision and clears a stale MOA setting in In Action.
 
 ## What's new in 1.13.0
 
