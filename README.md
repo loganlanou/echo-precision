@@ -1,8 +1,13 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.1**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.2**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.16.2
+
+- **Steadier compass.** The compass ignores the first second while the phone's sensor settles, averages over 1.5 seconds, and allows **Lock direction** only once the reading holds steady (within about 2–4°). If it never settles, **Lock anyway** appears after 8 seconds with a warning.
+- **Metal warning (Android).** Echo compares the compass with the phone's gyro, which can't be fooled by metal. If the compass drifts while the gyro says the phone is still, Echo warns that something magnetic is nearby (steel building, vehicle, computer, the rifle, a magnetic case) and how to calibrate. The gyro also smooths out compass jitter while you turn.
 
 ## What's new in 1.16.1
 
