@@ -1,8 +1,13 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.15.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.15.1**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.15.1
+
+- **Reticle picker on the hold page.** Under the reticle in In Action there's a "Reticle" menu for the selected rifle's scope: plain grid, Vortex EBR-2C (MRAD) or Trijicon MOA Precision Tree. Your choice is saved to that scope, so the right reticle shows every time you use that rifle. It's also under Armory → Scopes → "Reticle drawing on the hold page".
+- **Tenmile is easier to recognize.** Any scope named Tenmile, Ten-Mile or 10 Mile now draws the MOA Precision Tree, even with the reticle and unit fields left blank, unless the reticle says MRAD.
 
 ## What's new in 1.15.0
 
