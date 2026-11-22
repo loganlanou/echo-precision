@@ -1,8 +1,14 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.14.0**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.15.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.15.0
+
+- **Trijicon Tenmile reticle.** The Tenmile 4.5-30x56 FFP with the MOA Precision Tree (TM3056-C-3000012) is drawn on the In Action hold page. It shows tick marks every 1 MOA (numbered every 10), the holdover tree rows every 5 MOA down to 40, wind dots every 1 MOA with a diamond every 5, and the outer bars and post. Echo says the hold in words, e.g. "17.25 MOA down (2.25 below the 15 row) · 4.25 MOA right (4¼ dots)".
+- **Tenmile known-scope fill-in.** Armory → Scopes → Known scope now lists the Tenmile: first focal plane, MOA turrets, 1/4 MOA per click, 100 MOA elevation, 50 MOA windage, 34 mm tube.
+- The Vortex EBR-2C and the Tenmile now share one reticle drawer, so more reticles can be added from a maker's subtension chart.
 
 ## What's new in 1.14.0
 
