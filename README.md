@@ -1,8 +1,17 @@
 # Echo Precision
 
-Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.15.1**.
+Precision shooting ballistic calculator, AI range spotter and competition journal — browser build **Beta 1.16.0**.
 
 **Live test site:** https://echo-precision-test.vercel.app/
+
+## What's new in 1.16.0
+
+- **Magnification on the reticle view.** Under the hold reticle in In Action, set the power you're on with the slider or the − / + buttons. "Fit" zooms to the hold, as before. The view shows what you'd see through your scope at that power, using the maker's field of view (e.g. Vortex PST II 24.1 ft at 5x, Trijicon Tenmile 24.7 ft at 4.5x). The power is saved per scope.
+- **FFP and SFP handled differently, automatically.**
+  - **First focal plane:** the reticle grows and shrinks with the picture, so holds are the same at any power. Lower power shows more of the field around a smaller reticle.
+  - **Second focal plane:** the reticle stays the same size to your eye, and its marks are only true at one power (max by default, or the power you set). Below that, Echo scales the hold and tells you which mark to use, e.g. at 7x on a 14x-true scope: "each mark is worth 2×… On the reticle at 7x: 12.5 down".
+- If a hold is outside the view at high power, Echo tells you to zoom out.
+- **New scope fields:** power range, field of view at lowest power, and (SFP only) the power where holds are true. The power range is read from names like "5-25x50" when left blank. Known scopes fill all of these in.
 
 ## What's new in 1.15.1
 

@@ -1,7 +1,7 @@
 // Echo Precision offline support.
 // Everything the app needs is saved on the phone when it installs, so it opens with no signal.
 // With signal, the newest version is fetched (waiting at most a few seconds) so deployments are never stale.
-const CACHE = "echo-precision-v1.15.1";
+const CACHE = "echo-precision-v1.16.0";
 const SHELL = ["/", "/index.html", "/ballistics.js", "/manifest.webmanifest", "/icon.svg", "/icon-192.png", "/icon-512.png", "/icon-maskable-512.png", "/apple-touch-icon.png"];
 const WAIT_MS = 3000;
 
